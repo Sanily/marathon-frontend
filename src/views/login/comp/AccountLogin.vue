@@ -80,14 +80,9 @@ const rules = ref({
   ],
 })
 
-const settingOpt = ref<any>({})
-
 const form = ref({} as any)
 const onFinish = async (params) => {
   form.value = { ...params }
-  if (settingOpt.value.platform?.agreement !== 0) {
-    protoChecked.value = true
-  }
   if (!protoChecked.value) {
     Modal.confirm({
       title: '暂未勾选同意用户协议',

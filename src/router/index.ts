@@ -60,18 +60,18 @@ export const routes = [
     },
   },
   {
-    path: '/system/competition',
-    name: 'competition',
-    component: () => import('../views/system/competition/index.vue'),
+    path: '/system/event',
+    name: 'event',
+    component: () => import('../views/system/event/index.vue'),
     meta: {
       needAuth: false,
       title: '赛事管理'
     },
   },
   {
-    path: '/system/competition/detail',
-    name: 'competitionDetail',
-    component: () => import('../views/system/competition/index.vue'),
+    path: '/system/event/detail',
+    name: 'eventDetail',
+    component: () => import('../views/system/event/detail.vue'),
     meta: {
       needAuth: false,
       title: '赛事动态'

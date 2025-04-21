@@ -47,8 +47,7 @@ import {
 } from '@ant-design/icons-vue'
 import UserInfoDialog from './$comp/userInfoDialog.vue'
 import TextOverflow from '@/components/contents/textOverflow.vue'
-
-const tableColumns = ref([])
+import { getUserInfo } from '@/api/person'
 
 const loading = ref<boolean>(false)
 const userInfo = ref<any>({})
@@ -61,8 +60,8 @@ const onReflesh = async () => {
   getPersonData()
 }
 
-const getPersonData = () => {
-  
+const getPersonData = async () => {
+  await getUserInfo()
 }
 const handleEdit = () => {
   userInfoDialogVisible.value = true

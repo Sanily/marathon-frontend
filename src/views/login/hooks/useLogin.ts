@@ -10,20 +10,19 @@ export default function useLogin() {
     password: '',
   })
 
-  const forceHash = ref<string>('')
   // 执行密码登录
   const handleLogin = (params) => {
     return loginApi(params)
-      .then(async ({ code, data, message }) => {
+      .then(async ({ code, data }) => {
         if (code === 200) {
           localStorage.setItem('global_token', data?.token)
           if (data?.token) {
             // 跳转至重定向地址
             Message.success('登录成功')
+            return true
           } else {
             return false
           }
-          return true
         } else {
           return false
         }

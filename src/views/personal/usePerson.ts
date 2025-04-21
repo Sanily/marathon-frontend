@@ -9,17 +9,8 @@ export default function usePerson() {
     id: 0,
     name: '',
     mobile: '',
-    email: '',
     ageName: '',
     sexName: '',
-    industryName: '',
-    promoter: false, //具备邀请权限
-    total: '', //邀请码-限制人数
-    access: '', //邀请码-链接时效/h
-    overdue: '', //邀请码-账号有效期/d
-    rebind: '', //注册换绑
-    recover: '', //	重置密码;1:禁用,2:短信方式,3:密码方式
-    hash: '',
   })
   // 表单实例
   const personFormRef = ref()

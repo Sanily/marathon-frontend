@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      title="编辑资料"
+      title="编辑任务"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -17,40 +17,45 @@
       >
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item name="account" :rules="rules.account">
-              <template #label>
-                <span>用户名</span>
-                <span class="tip">支持字母、数字、下划线，6-20字符</span>
-              </template>
-              <a-input
-                v-model:value="userForm.account"
-                placeholder="请输入用户名"
-                :maxlength="20"
-                allow-clear
-                show-count
-                :disabled="disabledOpt.account"
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="姓名" name="name" :rules="rules.name">
+            <a-form-item name="name">
               <a-input
                 v-model:value="userForm.name"
-                placeholder="请输入姓名"
+                placeholder="请输入任务名称"
                 :maxlength="20"
                 allow-clear
                 show-count
-                :disabled="disabledOpt.name"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="性别" name="sex" :rules="rules.sex">
+            <a-form-item label="类别" name="realName">
+              <a-input
+                v-model:value="userForm.realName"
+                placeholder="请输入类别"
+                :maxlength="20"
+                allow-clear
+                show-count
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="描述" name="description">
+              <a-input
+                type="textarea"
+                v-model:value="userForm.description"
+                placeholder="请输入描述"
+                :maxlength="200"
+                allow-clear
+                show-count
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="时间" name="time">
               <a-radio-group
                 style="width: 100%"
-                v-model:value="userForm.sex"
+                v-model:value="userForm.gender"
                 button-style="solid"
-                :disabled="disabledOpt.sex"
               >
                 <a-radio-button
                   v-for="(itm, idx) in sexOpt"
@@ -62,28 +67,30 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="手机号码" name="mobile" :rules="rules.mobile">
+            <a-form-item label="所需人数" name="requiredNumber">
               <a-input
-                v-model:value="userForm.mobile"
-                placeholder="请输入手机号码"
+                v-model:value="userForm.requiredNumber"
+                placeholder="请输入所需人数"
                 allow-clear
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="年龄区间" name="age" :rules="rules.age">
-              <a-radio-group
-                style="width: 100%"
-                v-model:value="userForm.age"
-                button-style="solid"
-              >
-                <a-radio-button
-                  v-for="(itm, idx) in ageOpt"
-                  :value="itm.value"
-                  :key="idx"
-                  >{{ itm.label }}</a-radio-button
-                >
-              </a-radio-group>
+            <a-form-item label="确认人数" name="confirmedNumber">
+              <a-input
+                v-model:value="userForm.confirmedNumber"
+                placeholder="请输入所需人数"
+                allow-clear
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="状态" name="status">
+              <a-input
+                v-model:value="userForm.status"
+                placeholder="请输入状态"
+                allow-clear
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -103,8 +110,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { userInfoRules } from './option'
-import { editUserInfo } from '@/api/person/index'
+import { editTask, addTask } from '@/api/task'
 import { message as Message } from 'ant-design-vue'
 
 const props = defineProps({
@@ -123,9 +129,10 @@ const emits = defineEmits<{
 }>()
 const userForm = ref<any>({
   id: '',
-  mobile: '',
-  name: '',
-  sex: '',
+  phone: '',
+  realName: '',
+  username: '',
+  gender: '',
   age: '',
 })
 const sexOpt = ref<Array<any>>([
@@ -139,7 +146,6 @@ const ageOpt = ref<Array<any>>([
   { value: 'female', label: '女' },
 ])
 const userFormRef = ref<any>(null)
-const disabledOpt = ref<any>({}) // 存放 返回配置的各字段的禁用情况
 
 const visibleChange = computed({
   get: () => props.visible,
@@ -156,31 +162,21 @@ watch(
   }
 )
 
-const rules = computed(() => {
-  let rulesColumns = {} as any
-  const data = {} as any
-  Object.keys(rulesColumns).forEach((k) => {
-    data[k] = userInfoRules.value[k]
-  })
-  return data
-})
-
-const formKeys = computed(() => {
-  return Object.keys(rules.value)
-})
 const handleSubmit = () => {
   userFormRef.value
     .validate()
     .then(async () => {
-      // 将后端返回的字段作为 key 匹配对应的值，转为对象格式作为传参
-      const formOpt = Object.fromEntries(
-        formKeys.value.map((key) => [key, userForm.value[key]])
-      )
       const params = {
         id: props.row.id,
-        ...formOpt,
+        ...userForm.value,
       }
-      const { code, message } = await editUserInfo(params)
+      let fn = null
+      if (props.row.id) {
+        fn = editTask
+      } else {
+        fn = addTask
+      }
+      const { code, message } = await editTask(params)
       if (code === 200) {
         Message.success(message || '编辑成功')
         visibleChange.value = false

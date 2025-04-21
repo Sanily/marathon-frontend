@@ -2,7 +2,17 @@
   <div class="page-container">
   <a-table :columns="columns" :data-source="data">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'status'">
+      <template v-if="column.key === 'name'">
+        <a>
+          {{ record.name }}
+        </a>
+      </template>
+      <template v-else-if="column.key === 'time'">
+        <span>
+          {{ record.startTime }}至{{ record.endTime }}
+        </span>
+      </template>
+      <template v-else-if="column.key === 'status'">
         <span>
           <a-tag
             :color="record.status === 'loser' ? 'volcano' : record.status ? 'geekblue' : 'green'"
@@ -11,7 +21,9 @@
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
-        <div style="width: 100px" class="btn-op">
+        <div style="width: 150px" class="btn-op">
+          <a-button type="link" @click="handleDetail(record)">详情</a-button>
+          <a-divider type="vertical" />
           <a-button type="link" @click="handleEdit(record)">编辑</a-button>
           <a-divider type="vertical" />
           <a-popconfirm
@@ -27,7 +39,7 @@
     </template>
   </a-table>
   </div>
-  <FeedbackEditDialog
+  <EventEditDialog
     v-model:visible="userInfoDialogVisible"
     :row="{ ...userInfo }"
     @success="getData(1)"
@@ -35,31 +47,36 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
-import FeedbackEditDialog from './feedbackEditDialog.vue'
+import EventEditDialog from './eventEditDialog.vue'
 import { getEventList, deleteEvent } from '@/api/event';
 import { message as Message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-// 标题、内容、状态
+// {
+//       "content": "string",
+//       "createdAt": "2025-04-21T14:27:57.963Z",
+//       "eventId": 0,
+//       "id": 0
+//     }
 const columns = [
   {
-    title: '标题',
-    dataIndex: 'title',
-    key: 'title',
+    title: '赛事名称',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
-    title: '内容',
-    dataIndex: 'content',
-    key: 'content',
+    title: '日期',
+    dataIndex: 'time',
+    key: 'time',
   },
   {
-    title: '状态', // 已受理、未受理
-    dataIndex: 'status',
-    key: 'status',
+    title: '起点位置',
+    dataIndex: 'startSite',
+    key: 'startSite',
   },
   {
-    title: '反馈时间',
-    dataIndex: 'createdAt',
-    key: 'createdAt',
+    title: '终点位置',
+    dataIndex: 'endSite',
+    key: 'endSite',
   },
   {
     title: 'Action',
@@ -96,6 +113,11 @@ const pagination = ref({
 const getData = async (current = 1) => {
   pagination.value.current = current
   await getEventList({ ...pagination })
+}
+
+const router = useRouter()
+const handleDetail = (row) => {
+  router.push('/system/event/detail?id=' + row.id)
 }
 
 const userInfo = ref<any>({})

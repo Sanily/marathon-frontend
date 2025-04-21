@@ -1,39 +1,51 @@
 <template>
   <div class="page-container">
-  <a-table :columns="columns" :data-source="data">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span>
-          <smile-outlined />
-          Name
-        </span>
-      </template>
-    </template>
-
+  <a-table :columns="columns" :data-source="data" :pagination="pagination">
     <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'name'">
+      <template v-if="column.key === 'username'">
         <a>
           {{ record.name }}
         </a>
       </template>
       <template v-else-if="column.key === 'action'">
-        <span>
-          <a-button type="link">编辑</a-button>
+        <div style="width: 100px" class="btn-op">
+          <a-button type="link" @click="handleEdit(record)">编辑</a-button>
           <a-divider type="vertical" />
-          <a-button danger type="text">删除</a-button>
-        </span>
+          <a-popconfirm
+            title="确定删除?"
+            ok-text="是"
+            cancel-text="否"
+            @confirm="(e) => confirm(e, record)"
+          >
+            <a-button danger type="text" @click="handleDelete(record)">删除</a-button>
+          </a-popconfirm>
+        </div>
       </template>
     </template>
   </a-table>
   </div>
+  <UserEditDialog
+    v-model:visible="userInfoDialogVisible"
+    :row="{ ...userInfo }"
+    @success="getData(1)"
+  />
 </template>
 <script lang="ts" setup>
-import { SmileOutlined } from '@ant-design/icons-vue';
+import { onMounted, ref } from 'vue'
+import UserEditDialog from './userEditDialog.vue'
+import { getUserList, deleteUser } from '@/api/user';
+import { message as Message } from 'ant-design-vue'
+
 const columns = [
   {
-    name: '姓名',
-    dataIndex: 'name',
-    key: 'name',
+    title: '账号',
+    dataIndex: 'username',
+    key: 'username',
+  },
+  {
+    title: '姓名',
+    dataIndex: 'realName',
+    key: 'realName',
   },
   {
     title: '年龄',
@@ -46,33 +58,62 @@ const columns = [
     key: 'gender',
   },
   {
+    title: '联系方式',
+    dataIndex: 'phone',
+    key: 'phone',
+  },
+  {
     title: 'Action',
     key: 'action',
   },
 ];
 
-const data = [
+const data = ref([
   {
     key: '1',
-    name: 'John Brown',
+    realName: 'John Brown',
+    username: 'John Brown',
     age: 32,
     gender: '男',
-    tags: ['nice', 'developer'],
   },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    gender: '男',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    gender: '男',
-    tags: ['cool', 'teacher'],
-  },
-];
+]);
+
+onMounted(() => {
+  getData()
+})
+
+const pagination = ref({
+  current: 1,
+  pageSize: 10,
+  total: 0
+})
+
+const getData = async (current = 1) => {
+  pagination.value.current = current
+  await getUserList({ ...pagination })
+}
+
+const userInfo = ref<any>({})
+const userInfoDialogVisible = ref<boolean>(false)
+const handleEdit = (row) => {
+  userInfo.value = { ...row }
+  userInfoDialogVisible.value = true
+}
+
+const confirm = (e: MouseEvent, row) => {
+  handleDelete(row)
+};
+
+const handleDelete = async (row) => {
+  await deleteUser(row)
+  Message.success('删除成功');
+}
 </script>
 
+<style lang="less" scoped>
+.btn-op {
+  :deep(.ant-btn) {
+    padding: 4px 2px;
+  }
+}
+</style>

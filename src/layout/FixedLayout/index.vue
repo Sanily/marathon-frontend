@@ -34,11 +34,11 @@ const isSystem = computed(() => {
   const path = [
     '/personal',
     '/overview',
-    '/system/competition/detail'
+    '/system/event/detail'
   ]
   
   return (
-    route.path.includes('/system/') && !route.path.includes('/detail') ||
+    route.path.includes('/system/') ||
     !routeHasPath(path)
   )
 })

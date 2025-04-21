@@ -4,13 +4,10 @@
       <div class="login-container">
         <div class="login-container-title">
           <div class="title">
-            欢迎登录{{ settingOpt?.platform?.title || '' }}
-          </div>
-          <div class="desc">
-            {{ settingOpt?.platform?.subtitle || '' }}
+            欢迎登录马拉松志愿者系统
           </div>
         </div>
-        <div v-if="isOneMode" class="login-container-divider"></div>
+        <div class="login-container-divider"></div>
         <div class="login-container-tabs">
           <a-tabs v-model:activeKey="activeKey">
             <a-tab-pane
@@ -37,40 +34,17 @@
         <div class="login-container-type">
           <AccountLogin v-if="activeKey === 'account'" />
         </div>
-        <div class="login-container-desc">
-          {{ settingOpt?.platform?.footer }}
-        </div>
       </div>
     </LoginLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import LoginLayout from '@/components/loginRegister/layout.vue'
 import AccountLogin from './comp/AccountLogin.vue'
 
 const activeKey = ref<string>('account')
-
-const settingOpt = ref<any>({})
-
-onMounted(() => {
-  getLoginSettings()
-})
-
-// 判断只有一种登录方式 若为true不展示tabs切换
-const isOneMode = ref(true)
-
-const getLoginSettings = async () => {
-  const settingsData = JSON.parse(localStorage.getItem('global_settings') || '{}')
-  settingOpt.value = settingsData || {}
-  document.title = settingsData?.platform?.title || ''
-  const iconDom = document.querySelector('#iconDom') as HTMLLinkElement
-  iconDom.href = settingsData?.platform?.favicon || ''
-  const { account, mobile, wechat, ding } = settingsData.auth || {}
-  const _data = [account, mobile, wechat, ding].filter((i) => i === 0).length
-  isOneMode.value = _data === 1 ? true : false
-}
 </script>
 
 <style scoped lang="less">
