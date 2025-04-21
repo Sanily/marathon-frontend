@@ -1,30 +1,47 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div>
-  <HelloWorld msg="Vite + Vue" />
+  <a-config-provider :locale="locale" :autoInsertSpaceInButton="false">
+      <router-view></router-view>
+  </a-config-provider>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+<script lang="ts">
+import {
+  defineComponent,
+} from 'vue'
+import dayjs from 'dayjs'
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import 'dayjs/locale/zh-cn'
+
+dayjs.locale('zh_cn')
+export default defineComponent({
+  name: 'App',
+  setup() {
+    return {
+      locale: zhCN,
+    }
+  },
+})
+</script>
+
+<style lang="less" scoped>
+#app {
+  width: 100%;
+  height: 100%;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+html {
+  overflow-y: hidden;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+.ant-spin-nested-loading,
+.ant-spin-container {
+  width: 100%;
+  height: 100%;
+}
+.ant-spin {
+  max-height: unset !important;
+}
+.full {
+  width: 100%;
+  overflow-y: overlay;
+  min-height: 100vh;
 }
 </style>
