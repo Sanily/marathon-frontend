@@ -1,10 +1,10 @@
 import { ref, onBeforeUnmount } from 'vue'
 import { message as Message } from 'ant-design-vue'
 import { authRegister, authSms } from '@/api/login'
-import useRouter from '@/hooks/useRouter'
+import { useRouter } from 'vue-router'
 
 export default function useRegister() {
-  const { router } = useRouter()
+  const router = useRouter()
 
   // 是否禁用
   const phoneDisabled = ref(false)

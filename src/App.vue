@@ -1,26 +1,30 @@
 <template>
-  <a-config-provider :locale="locale" :autoInsertSpaceInButton="false">
+  <a-config-provider :locale="zhCN" :autoInsertSpaceInButton="false">
+    <template v-if="isFullLayout">
       <router-view></router-view>
+    </template>
+    <FixedLayout v-else>
+      <router-view></router-view>
+    </FixedLayout>
   </a-config-provider>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-  defineComponent,
+  computed,
 } from 'vue'
 import dayjs from 'dayjs'
 import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import FixedLayout from '@/layout/FixedLayout/index.vue'
 import 'dayjs/locale/zh-cn'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const paths = ['/login', '/register']
+const isFullLayout = computed(() => paths.includes(route.path))
 
 dayjs.locale('zh_cn')
-export default defineComponent({
-  name: 'App',
-  setup() {
-    return {
-      locale: zhCN,
-    }
-  },
-})
 </script>
 
 <style lang="less" scoped>

@@ -21,7 +21,7 @@ export interface EditUserInfoRes {
   name?: string
   roleId?: string | number
   mobile?: string
-  sex?: string | number
+  gender?: string | number
   age?: string | number
   email?: string
   industry?: string | number

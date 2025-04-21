@@ -24,12 +24,12 @@
           size="large"
         />
       </a-form-item>
-      <a-form-item label="" name="sex" :rules="rules.sex">
+      <a-form-item label="" name="gender" :rules="rules.gender">
         <div class="label">性别</div>
         <div class="com-tag-wrap">
           <div
             class="tag-item"
-            :class="{ 'tag-item-active': userForm.sex === item.value }"
+            :class="{ 'tag-item-active': userForm.gender === item.value }"
             v-for="(item, index) in sexOpt"
             :key="index"
             @click="changeSex(item)"
@@ -62,7 +62,7 @@ import _regexp from '@/utils/_regexp'
 const userForm = ref<any>({
   name: '',
   email: '',
-  sex: '',
+  gender: '',
   age: '',
 })
 const sexOpt = ref<Array<any>>([
@@ -90,7 +90,7 @@ const rules = ref({
       message: '请输入正确格式的邮箱',
     },
   ],
-  sex: [{ required: true, message: '请选择性别' }],
+  gender: [{ required: true, message: '请选择性别' }],
   age: [{ required: true, message: '请选择年龄区间' }],
 })
 const userFormRef = ref<any>(null)
@@ -98,8 +98,8 @@ const emit = defineEmits<{
   (e: 'success', formData: any): void
 }>()
 const changeSex = (val: any) => {
-  userForm.value.sex = val.value || ''
-  userFormRef.value.validateFields(['sex'])
+  userForm.value.gender = val.value || ''
+  userFormRef.value.validateFields(['gender'])
 }
 const changeAge = (val: any) => {
   userForm.value.age = val.value || ''

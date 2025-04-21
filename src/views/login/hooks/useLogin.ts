@@ -1,11 +1,8 @@
-import { ref, createVNode } from 'vue'
-import { message as Message, Modal } from 'ant-design-vue'
-import { ExclamationCircleFilled } from '@ant-design/icons-vue'
-import useRouter from '@/hooks/useRouter'
+import { ref } from 'vue'
+import { message as Message } from 'ant-design-vue'
 import { login as loginApi } from '@/api/login'
 
 export default function useLogin() {
-  const { router } = useRouter()
 
   // 登录表单
   const formState = ref({

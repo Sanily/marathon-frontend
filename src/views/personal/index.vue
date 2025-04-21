@@ -1,99 +1,171 @@
 <template>
-  <div class="page-container">
-  <a-table :columns="columns" :data-source="data">
-    <template #headerCell="{ column }">
-      <template v-if="column.key === 'name'">
-        <span>
-          <smile-outlined />
-          Name
-        </span>
-      </template>
-    </template>
-
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'name'">
-        <a>
-          {{ record.name }}
-        </a>
-      </template>
-      <template v-else-if="column.key === 'tags'">
-        <span>
-          <a-tag
-            v-for="tag in record.tags"
-            :key="tag"
-            :color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-          >
-            {{ tag.toUpperCase() }}
-          </a-tag>
-        </span>
-      </template>
-      <template v-else-if="column.key === 'action'">
-        <span>
-          <a>Invite 一 {{ record.name }}</a>
-          <a-divider type="vertical" />
-          <a>Delete</a>
-          <a-divider type="vertical" />
-          <a class="ant-dropdown-link">
-            More actions
-            <down-outlined />
-          </a>
-        </span>
-      </template>
-    </template>
-  </a-table>
+  <div class="person">
+    <a-spin :spinning="loading">
+      <div class="com-module person-info">
+        <div class="name">
+          {{ userInfo.name || '--' }}
+          <div class="icon" @click="handleEdit">
+            <edit-outlined />
+          </div>
+        </div>
+        <a-descriptions :column="4">
+          <a-descriptions-item
+            label="姓名"
+            ><TextOverflow :text="userInfo?.name || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="用户名"
+            ><TextOverflow :text="userInfo?.account || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="手机号"
+            ><TextOverflow :text="userInfo?.mobile || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="性别"
+            ><TextOverflow :text="userInfo?.sexName || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="年龄"
+            ><TextOverflow :text="userInfo?.ageName || '--'"
+          /></a-descriptions-item>
+        </a-descriptions>
+      </div>
+    </a-spin>
+    <UserInfoDialog
+      v-model:visible="userInfoDialogVisible"
+      :row="{ ...userInfo }"
+      @success="onReflesh"
+    />
   </div>
 </template>
-<script lang="ts" setup>
-import { SmileOutlined, DownOutlined } from '@ant-design/icons-vue';
-const columns = [
-  {
-    name: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: 'Tags',
-    key: 'tags',
-    dataIndex: 'tags',
-  },
-  {
-    title: 'Action',
-    key: 'action',
-  },
-];
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import {
+  EditOutlined,
+} from '@ant-design/icons-vue'
+import UserInfoDialog from './$comp/userInfoDialog.vue'
+import TextOverflow from '@/components/contents/textOverflow.vue'
+
+const tableColumns = ref([])
+
+const loading = ref<boolean>(false)
+const userInfo = ref<any>({})
+const userInfoDialogVisible = ref<boolean>(false)
+
+onMounted(() => {
+  getPersonData()
+})
+const onReflesh = async () => {
+  getPersonData()
+}
+
+const getPersonData = () => {
+  
+}
+const handleEdit = () => {
+  userInfoDialogVisible.value = true
+}
 </script>
 
+<style scoped lang="less">
+.person {
+  .com-module {
+    border-radius: 4px;
+    background: #fff;
+  }
+  &-info {
+    padding: 34px 68px;
+    .name {
+      color: var(--Gray-Gray5, #3c485c);
+      font-family: PingFang SC;
+      font-size: 24px;
+      font-weight: 500;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      .icon {
+        margin-left: 20px;
+        font-size: 14px;
+        cursor: pointer;
+      }
+    }
+    .icon {
+      color: #2d77e5;
+      margin-left: 8px;
+    }
+    :deep(.ant-descriptions) {
+      .ant-descriptions-item-container {
+        display: flex;
+      }
+      .ant-descriptions-item-label,
+      .ant-descriptions-item-content {
+        max-width: calc(100% - 88px);
+        color: #13161b;
+        font-family: PingFang SC;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  &-banner {
+    padding: 16px 36px 40px 36px;
+    .module-item {
+      display: flex;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 1px solid #d6dbe3;
+      .img {
+        width: 40px;
+        height: 40px;
+        margin-right: 16px;
+      }
+      .conc {
+        flex: 1;
+        color: #13161b;
+        .title {
+          font-size: 16px;
+          font-weight: 500;
+        }
+        .desc {
+          margin-top: 6px;
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          .red {
+            font-size: 18px;
+            color: #c9353f;
+            padding: 0 8px;
+          }
+          .conc-form {
+            display: flex;
+            align-items: center;
+            .ant-form-item {
+              margin-bottom: 0;
+            }
+            :deep(.ant-form-item-explain) {
+              display: none;
+            }
+          }
+        }
+      }
+      .ope {
+        width: 100px;
+        text-align: right;
+        color: #2d77e5;
+        font-family: PingFang SC;
+        font-size: 14px;
+        cursor: pointer;
+        &.disabled {
+          color: #3c485c;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+}
+</style>

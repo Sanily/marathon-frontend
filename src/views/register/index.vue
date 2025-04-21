@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import LoginLayout from '@/components/loginRegister/layout.vue'
 import RegisterForm from './comp/RegisterForm.vue'
 import { useRouter } from 'vue-router'

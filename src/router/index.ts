@@ -33,11 +33,57 @@ export const routes = [
     },
   },
   {
+    path: '/overview',
+    name: 'overview',
+    component: () => import('../views/overview/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '工作总览'
+    },
+  },
+  {
     path: '/system/user',
     name: 'user',
     component: () => import('../views/system/user/index.vue'),
     meta: {
       needAuth: false,
+      title: '用户管理'
+    },
+  },
+  {
+    path: '/system/task',
+    name: 'task',
+    component: () => import('../views/system/task/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '任务管理'
+    },
+  },
+  {
+    path: '/system/competition',
+    name: 'competition',
+    component: () => import('../views/system/competition/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '赛事管理'
+    },
+  },
+  {
+    path: '/system/competition/detail',
+    name: 'competitionDetail',
+    component: () => import('../views/system/competition/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '赛事动态'
+    },
+  },
+  {
+    path: '/system/feedback',
+    name: 'feedback',
+    component: () => import('../views/system/feedback/index.vue'),
+    meta: {
+      needAuth: false,
+      title: '反馈管理'
     },
   },
   {
