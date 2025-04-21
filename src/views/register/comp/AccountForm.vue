@@ -61,9 +61,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { message as Message } from 'ant-design-vue'
 import useRegister from '../hooks/useRegister'
 import _regexp from '@/utils/_regexp'
-const { curHash, phoneDisabled, codeTime, handleGetSms } = useRegister()
+const { curHash, phoneDisabled, codeTime } = useRegister()
 const accountForm = ref<any>({
   mobile: '',
   captcha: '',
@@ -123,30 +124,20 @@ const rules = ref({
     },
   ],
 })
-// 获取短信的 hash
-const getHash = (hash: string) => {
-  smsObj.value.hash = hash || ''
-}
+
 const getSms = () => {
-  accountFormRef.value
-    .validate(['mobile'])
-    .then(async () => {
-      smsObj.value.mobile = accountForm.value.mobile
-      handleGetSms(smsObj.value)
-    })
-    .catch(() => {})
+  Message.success('验证码是：123456')
 }
 const validateForm = () => {
   accountFormRef.value
     .validate()
     .then(() => {
-      emit('success', { hash: curHash.value, ...accountForm.value })
+      emit('success', { ...accountForm.value })
     })
     .catch(() => {})
 }
 defineExpose({
   validateForm,
-  getHash,
 })
 </script>
 

@@ -87,9 +87,6 @@ watch(
   () => props.invitationObj,
   (val: any) => {
     invitationVal.value = val?.invitation || ''
-    nextTick(() => {
-      accountFormRef.value?.getHash(val.hash)
-    })
   },
   { immediate: true }
 )
