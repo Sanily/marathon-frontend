@@ -17,6 +17,14 @@ export const routes = [
     },
   },
   {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/register/index.vue'),
+    meta: {
+      needAuth: false,
+    },
+  },
+  {
     path: '/personal',
     name: 'personal',
     component: () => import('../views/personal/index.vue'),

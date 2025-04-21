@@ -3,7 +3,7 @@
     <div class="login-layout-left">
       <img
         id="login-video"
-        :src="platform?.background || loginMp4"
+        :src="platform?.background || loginBg"
         preload="auto"
         autoplay="autoplay"
         loop="loop"
@@ -21,8 +21,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, computed, nextTick } from 'vue'
-import loginMp4 from '@/assets/images/bg-login.jpg'
+import { ref, onMounted } from 'vue'
+import loginBg from '@/assets/images/bg-login.jpeg'
 
 const platform = ref({
   background: '',
