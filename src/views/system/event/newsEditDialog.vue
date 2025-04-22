@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      :title="props.row.id ? '编辑赛事' : '新增赛事'"
+      :title="'赛事动态'"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -16,39 +16,12 @@
         layout="vertical"
       >
         <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-item label="赛事名称" name="name">
-              <a-input
-                v-model:value="userForm.name"
-                placeholder="请输入赛事名称"
-                :maxlength="20"
-                allow-clear
-                show-count
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="日期" name="eventDate">
-              <a-date-picker style="width: 100%;" v-model:value="userForm.eventDate" value-format="YYYY-MM-DD" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="起点位置" name="startLocation">
-              <a-input
-                v-model:value="userForm.startLocation"
-                placeholder="请输入起点位置"
-                :maxlength="20"
-                allow-clear
-                show-count
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="终点位置" name="endLocation">
-              <a-input
-                v-model:value="userForm.endLocation"
-                placeholder="请输入终点位置"
-                :maxlength="20"
+          <a-col :span="24">
+            <a-form-item label="动态描述" name="content">
+              <a-textarea
+                v-model:value="userForm.content"
+                placeholder="请输入动态描述"
+                :maxlength="200"
                 allow-clear
                 show-count
               />
@@ -71,7 +44,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { editEvent, addEvent } from '@/api/event'
+import { addEventNews } from '@/api/event-news'
 import { message as Message } from 'ant-design-vue'
 
 const props = defineProps({
@@ -90,10 +63,7 @@ const emits = defineEmits<{
 }>()
 const userForm = ref<any>({
   id: '',
-  name: '',
-  eventDate: '',
-  startLocation: '',
-  endLocation: '',
+  content: '',
 })
 
 const userFormRef = ref<any>(null)
@@ -120,17 +90,10 @@ const handleSubmit = () => {
     .validate()
     .then(async () => {
       const params = {
-        id: props.row.id,
-        ...userForm.value,
+        eventId: props.row.id,
+        content: userForm.value.content,
       }
-      let fn = null
-      if (props.row.id) {
-        fn = editEvent
-      } else {
-        fn = addEvent
-        delete params.id
-      }
-      const { message } = await fn(params)
+      const { message } = await addEventNews(params)
       Message.success(message || '操作成功')
       visibleChange.value = false
       emits('success')

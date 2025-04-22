@@ -10,7 +10,6 @@ export interface LoginRes {
 }
 export const login = (params: Record<string, any>) => {
   const result = md5Encrypt(params.password);
-  console.log(result); // 输出MD5加密后的字 符串
   return fetch<Response<LoginRes>>({
     url: '/api/login/in',
     method: 'post',
@@ -21,7 +20,6 @@ export const login = (params: Record<string, any>) => {
   })
 }
 
-// {"invitation":"","name":"123","email":"11@cc.om","gender":"male","age":"18-20岁","emergencyContact":"13333333333","mobile":"13333333333","captcha":"123456","password":"1111@!Aa"}
 export const register = (params: Record<string, any>) => {
   const result = md5Encrypt(params.password);
   return fetch<Response<LoginRes>>({

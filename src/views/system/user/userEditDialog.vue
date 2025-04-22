@@ -32,6 +32,17 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
+            <a-form-item label="密码" name="password" :rules="rules.password">
+              <a-input-password
+                v-model:value="userForm.password"
+                placeholder="请输入用户名"
+                :maxlength="20"
+                allow-clear
+                show-count
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
             <a-form-item label="姓名" name="realName" :rules="rules.realName">
               <a-input
                 v-model:value="userForm.realName"

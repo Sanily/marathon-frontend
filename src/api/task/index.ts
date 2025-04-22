@@ -5,7 +5,12 @@ export const getTaskList = () =>
     url: '/api/task/',
     method: 'get',
   })
-
+export const assignTask = (data) =>
+  fetch<Response<any>>({
+    url: '/api/task/assign',
+    method: 'post',
+    data,
+  })
 export const editTask = (data) =>
   fetch<Response<any>>({
     url: '/api/task/update',

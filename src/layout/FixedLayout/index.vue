@@ -68,8 +68,9 @@ const showDefault = computed(() => {
     }
     .main-content {
       width: calc(100vw - 200px);
-      height: calc(100vh - 100px);
+      height: 100vh;
       padding: 80px 0 0 20px;
+      overflow-y: auto;
     }
   }
   .main {

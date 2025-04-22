@@ -19,9 +19,11 @@ const handleClick: MenuProps['onClick'] = ({ key }) => {
   router.push(key)
 }
 
+
 const menuList = computed(() => {
+  const role = localStorage.getItem('global_role')
   return routes
-    .filter(route => route.path.includes('/system') && !route.path.includes('/detail'))
+    .filter(route => route.path.includes('/system') && !route.path.includes('/detail') && (role === 'ADMIN' || route.path !== '/system/user'))
     .map(route => ({
       key: route.path,
       label: route.meta.title,

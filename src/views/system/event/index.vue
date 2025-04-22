@@ -2,7 +2,7 @@
   <div class="page-container">
   <a-table :columns="columns" :data-source="data">
     <template #title>
-      <a-button type="primary" @click="handleEdit({})">新增</a-button>
+      <a-button v-if="role === 'ADMIN'" type="primary" @click="handleEdit({})">新增</a-button>
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'name'">
@@ -63,18 +63,18 @@ const columns = [
   },
   {
     title: '日期',
-    dataIndex: 'time',
-    key: 'time',
+    dataIndex: 'eventDate',
+    key: 'eventDate',
   },
   {
     title: '起点位置',
-    dataIndex: 'startSite',
-    key: 'startSite',
+    dataIndex: 'startLocation',
+    key: 'startLocation',
   },
   {
     title: '终点位置',
-    dataIndex: 'endSite',
-    key: 'endSite',
+    dataIndex: 'endLocation',
+    key: 'endLocation',
   },
   {
     title: '操作项',
@@ -84,7 +84,9 @@ const columns = [
 
 const data = ref([]);
 
+const role = ref('')
 onMounted(() => {
+  role.value = localStorage.getItem('global_role')
   getData()
 })
 

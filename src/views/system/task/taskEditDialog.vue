@@ -17,7 +17,7 @@
       >
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item name="name">
+            <a-form-item label="任务名称" name="name">
               <a-input
                 v-model:value="userForm.name"
                 placeholder="请输入任务名称"
@@ -28,14 +28,14 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="类别" name="realName">
-              <a-input
-                v-model:value="userForm.realName"
-                placeholder="请输入类别"
-                :maxlength="20"
-                allow-clear
-                show-count
-              />
+            <a-form-item label="类别" name="category">
+              <a-select
+                v-model:value="userForm.category"
+                style="width: 100%"
+                show-search
+                placeholder="请选择类别"
+                :options="categoryOpt"
+              ></a-select>
             </a-form-item>
           </a-col>
           <a-col :span="24">
@@ -50,8 +50,22 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="时间" name="time">
-              
+            <a-form-item label="开始时间" name="time">
+              <a-date-picker v-model:value="userForm.startTime" style="width: 100%" show-time placeholder="请选择开始时间" @ok="(value) => onOk(value, 'startTime')"  value-format="YYYY-MM-DD" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="结束时间" name="time">
+              <a-date-picker v-model:value="userForm.startTime" style="width: 100%" show-time placeholder="请选择结束时间" @ok="(value) => onOk(value, 'endTime')"  value-format="YYYY-MM-DD" />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="地点" name="location">
+              <a-input
+                v-model:value="userForm.location"
+                placeholder="请输入地点"
+                allow-clear
+              />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -59,24 +73,6 @@
               <a-input
                 v-model:value="userForm.requiredNumber"
                 placeholder="请输入所需人数"
-                allow-clear
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="确认人数" name="confirmedNumber">
-              <a-input
-                v-model:value="userForm.confirmedNumber"
-                placeholder="请输入所需人数"
-                allow-clear
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="状态" name="status">
-              <a-input
-                v-model:value="userForm.status"
-                placeholder="请输入状态"
                 allow-clear
               />
             </a-form-item>
@@ -100,6 +96,7 @@
 import { ref, computed, watch } from 'vue'
 import { editTask, addTask } from '@/api/task'
 import { message as Message } from 'ant-design-vue'
+import { Dayjs } from 'dayjs';
 
 const props = defineProps({
   visible: {
@@ -115,14 +112,26 @@ const emits = defineEmits<{
   (e: 'update:visible', value: boolean): void
   (e: 'success'): void
 }>()
+
 const userForm = ref<any>({
   id: '',
-  phone: '',
-  realName: '',
-  username: '',
-  gender: '',
-  age: '',
+  name: '',
+  description: '',
+  location: '',
+  requiredNumber: '',
+  startTime: '',
+  endTime: '',
+  category: null,
 })
+const categoryOpt = [
+  { label: '赛道引导', value: '赛道引导' },
+  { label: '物资发放', value: '物资发放' },
+  { label: '医疗辅助', value: '医疗辅助' },
+]
+
+const onOk = (value: Dayjs, key) => {
+  userForm.value[key] = value
+};
 
 const userFormRef = ref<any>(null)
 
@@ -137,6 +146,8 @@ watch(
   async (value) => {
     if (value) {
       userForm.value = { ...userForm.value, ...props.row }
+    } else {
+      handleReset()
     }
   }
 )
@@ -154,21 +165,27 @@ const handleSubmit = () => {
         fn = editTask
       } else {
         fn = addTask
+        delete params.id
       }
-      const { code, message } = await editTask(params)
-      if (code === 200) {
-        Message.success(message || '操作成功')
-        visibleChange.value = false
-        emits('success')
-      } else {
-        message && Message.error(message)
-      }
+      const { message } = await fn(params)
+      Message.success(message || '操作成功')
+      visibleChange.value = false
+      emits('success')
     })
     .catch(() => {})
 }
 const handleReset = () => {
   userFormRef.value.resetFields()
-  userForm.value = { ...userForm.value, ...props.row }
+  userForm.value = {
+    id: '',
+    name: '',
+    description: '',
+    location: '',
+    requiredNumber: '',
+    startTime: '',
+    endTime: '',
+    category: null,
+  }
 }
 </script>
 
