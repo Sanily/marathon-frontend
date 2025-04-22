@@ -10,7 +10,7 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted, watch, nextTick } from 'vue'
+import { ref, onMounted, watch, nextTick, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MenuListRes } from '@/api/auth'
 import type { MenuProps } from 'ant-design-vue'
@@ -19,6 +19,9 @@ const router = useRouter()
 const route = useRoute()
 
 const selectedKeys = ref<(string | number)[]>([])
+const role = computed(() => {
+  return localStorage.getItem('global_role')
+})
 const menuList = ref<MenuListRes[]>([
   {
     key: '/overview',
@@ -26,7 +29,7 @@ const menuList = ref<MenuListRes[]>([
     title: '数据总览',
   },
   {
-    key: '/system/user',
+    key: role.value === 'ADMIN' ? '/system/user' : '/system/task',
     label: '系统管理',
     title: '系统管理',
   }
