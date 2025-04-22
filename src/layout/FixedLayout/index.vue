@@ -33,7 +33,7 @@ const routeHasPath = (path: string[]) => {
 const isSystem = computed(() => {
   const path = [
     '/personal',
-    '/overview',
+    '/statistics',
     '/system/event/detail'
   ]
   

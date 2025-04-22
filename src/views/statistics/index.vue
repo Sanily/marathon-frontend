@@ -5,8 +5,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import AdminPage from './admin/overview/index.vue'
-import VolunteerPage from './volunteer/overview/index.vue'
+import AdminPage from './admin/index.vue'
+import VolunteerPage from './volunteer/index.vue'
 
 const role = ref('')
 onMounted(() => {

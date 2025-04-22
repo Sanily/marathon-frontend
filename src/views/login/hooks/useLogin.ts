@@ -22,7 +22,7 @@ export default function useLogin() {
           localStorage.setItem('global_userInfo', JSON.stringify(data))
           // 跳转至重定向地址C
           Message.success('登录成功')
-          router.push('/overview')
+          router.push('/statistics')
           return true
         } else {
           return false

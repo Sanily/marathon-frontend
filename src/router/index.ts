@@ -33,9 +33,9 @@ export const routes = [
     },
   },
   {
-    path: '/overview',
-    name: 'overview',
-    component: () => import('../views/overview/index.vue'),
+    path: '/statistics',
+    name: 'statistics',
+    component: () => import('../views/statistics/index.vue'),
     meta: {
       needAuth: false,
       title: '数据总览'

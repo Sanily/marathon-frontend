@@ -24,7 +24,7 @@ const role = computed(() => {
 })
 const menuList = ref<MenuListRes[]>([
   {
-    key: '/overview',
+    key: '/statistics',
     label: '数据总览',
     title: '数据总览',
   },
