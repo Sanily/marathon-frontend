@@ -34,6 +34,10 @@
         <div class="login-container-type">
           <AccountLogin v-if="activeKey === 'account'" />
         </div>
+        <div class="login-container-desc">
+          没有账号?
+          <span class="go-login" @click="goLogin">去注册</span>
+        </div>
       </div>
     </LoginLayout>
   </div>
@@ -43,6 +47,12 @@
 import { ref } from 'vue'
 import LoginLayout from '@/components/loginRegister/layout.vue'
 import AccountLogin from './comp/AccountLogin.vue'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const goLogin = () => {
+  router.replace('/register')
+}
 
 const activeKey = ref<string>('account')
 </script>
@@ -113,6 +123,10 @@ const activeKey = ref<string>('account')
       text-align: center;
       position: absolute;
       bottom: 0px;
+      .go-login {
+        color: #2d77e5;
+        cursor: pointer;
+      }
     }
   }
 }

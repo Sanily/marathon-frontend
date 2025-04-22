@@ -7,6 +7,17 @@
       name="basic"
       autocomplete="off"
     >
+      <a-form-item label="" name="name" :rules="rules.account">
+        <div class="label">昵称</div>
+        <a-input
+          v-model:value="userForm.account"
+          placeholder="请输入账号名"
+          :maxlength="20"
+          show-count
+          allowClear
+          size="large"
+        />
+      </a-form-item>
       <a-form-item label="" name="mobile" :rules="rules.mobile">
         <div class="label">手机号码</div>
         <a-input
@@ -64,16 +75,13 @@ import { ref } from 'vue'
 import { message as Message } from 'ant-design-vue'
 import useRegister from '../hooks/useRegister'
 import _regexp from '@/utils/_regexp'
-const { curHash, phoneDisabled, codeTime } = useRegister()
+const { phoneDisabled, codeTime } = useRegister()
 const accountForm = ref<any>({
+  account: '',
   mobile: '',
   captcha: '',
   password: '',
   checkPassword: '',
-})
-const smsObj = ref({
-  mobile: '',
-  hash: '',
 })
 const accountFormRef = ref<any>(null)
 const emit = defineEmits<{
@@ -101,6 +109,13 @@ const validateConfirmPassword = (rule, value) => {
   return Promise.resolve()
 }
 const rules = ref({
+  account: [
+    { required: true, message: '请输入姓名' },
+    {
+      pattern: _regexp.accountReg,
+      message: '账号允许中英文、数字、下划线，长度5-20个字符',
+    },
+  ],
   mobile: [
     { required: true, message: '请输入手机号码' },
     { pattern: _regexp.mobile, message: '手机号码格式异常' },

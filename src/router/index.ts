@@ -38,7 +38,7 @@ export const routes = [
     component: () => import('../views/overview/index.vue'),
     meta: {
       needAuth: false,
-      title: '工作总览'
+      title: '数据总览'
     },
   },
   {

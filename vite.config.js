@@ -20,7 +20,7 @@ export default defineConfig({
         ws: false, // 是否代理websockets
         changeOrigin: true,
         // 重写路径
-        rewrite: (path) => path.replace(/^\/api/, '/'),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },

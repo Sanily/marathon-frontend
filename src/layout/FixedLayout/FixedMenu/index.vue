@@ -22,8 +22,8 @@ const selectedKeys = ref<(string | number)[]>([])
 const menuList = ref<MenuListRes[]>([
   {
     key: '/overview',
-    label: '工作总览',
-    title: '工作总览',
+    label: '数据总览',
+    title: '数据总览',
   },
   {
     key: '/system/user',

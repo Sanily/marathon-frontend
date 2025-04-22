@@ -10,7 +10,7 @@ import VolunteerPage from './volunteer/overview/index.vue'
 
 const role = ref('')
 onMounted(() => {
-  role.value = 'volunteer'
+  role.value = 'admin'
 })
 
 </script>

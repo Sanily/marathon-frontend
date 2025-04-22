@@ -1,28 +1,26 @@
 import { ref } from 'vue'
 import { message as Message } from 'ant-design-vue'
 import { login as loginApi } from '@/api/login'
+import { useRouter } from 'vue-router'
 
 export default function useLogin() {
-
+  const router = useRouter()
   // 登录表单
   const formState = ref({
-    mobile: '',
+    account: '',
     password: '',
   })
 
   // 执行密码登录
   const handleLogin = (params) => {
     return loginApi(params)
-      .then(async ({ code, data }) => {
-        if (code === 200) {
+      .then(async (data) => {
+        if (data.token) {
           localStorage.setItem('global_token', data?.token)
-          if (data?.token) {
-            // 跳转至重定向地址
-            Message.success('登录成功')
-            return true
-          } else {
-            return false
-          }
+          // 跳转至重定向地址
+          Message.success('登录成功')
+          router.push('/overview')
+          return true
         } else {
           return false
         }

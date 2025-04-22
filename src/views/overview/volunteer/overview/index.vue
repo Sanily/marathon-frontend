@@ -1,6 +1,6 @@
 <template>
   <div class="grid-layout">
-    <a-card class="line-card" title="每月任务参与 & 完成情况">
+    <a-card class="line-card" title="任务参与 & 完成情况">
       <div ref="lineChart" class="chart-container"></div>
     </a-card>
 

@@ -79,7 +79,7 @@ const columns = [
     key: 'endSite',
   },
   {
-    title: 'Action',
+    title: '操作项',
     key: 'action',
   },
 ];

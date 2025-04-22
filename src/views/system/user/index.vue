@@ -63,7 +63,7 @@ const columns = [
     key: 'phone',
   },
   {
-    title: 'Action',
+    title: '操作项',
     key: 'action',
   },
 ];

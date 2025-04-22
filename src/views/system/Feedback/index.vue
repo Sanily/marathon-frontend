@@ -5,8 +5,9 @@
       <template v-if="column.key === 'status'">
         <span>
           <a-tag
-            :color="record.status === 'loser' ? 'volcano' : record.status ? 'geekblue' : 'green'"
+            :color="record.status === '未处理' ? 'volcano' : 'green'"
           >
+          {{ record.status }}
           </a-tag>
         </span>
       </template>
@@ -52,35 +53,34 @@ const columns = [
     key: 'content',
   },
   {
-    title: '状态', // 已受理、未受理
+    title: '回复内容',
+    dataIndex: 'answer',
+    key: 'answer',
+  },
+  {
+    title: '状态', // 已处理、未处理
     dataIndex: 'status',
     key: 'status',
   },
   {
-    title: '反馈时间',
+    title: '创建时间',
     dataIndex: 'createdAt',
     key: 'createdAt',
   },
   {
-    title: 'Action',
+    title: '操作项',
     key: 'action',
   },
 ];
 
 const data = ref([
   {
-    "category": "string",
-    "confirmedNumber": 0,
-    "createdAt": "2025-04-21T11:47:57.845Z",
-    "createdBy": 0,
-    "description": "string",
-    "endTime": "2025-04-21T11:47:57.845Z",
+    "content": "string",
+    "createdAt": "2025-04-22T01:56:21.571Z",
     "id": 0,
-    "location": "string",
-    "name": "string",
-    "requiredNumber": 0,
-    "startTime": "2025-04-21T11:47:57.845Z"
-  },
+    "status": "已处理",
+    "volunteerId": 0
+  }
 ]);
 
 onMounted(() => {

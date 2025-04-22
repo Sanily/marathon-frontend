@@ -40,18 +40,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="性别" name="gender">
-              <a-radio-group
-                style="width: 100%"
-                v-model:value="userForm.gender"
-                button-style="solid"
-              >
-                <a-radio-button
-                  v-for="(itm, idx) in sexOpt"
-                  :value="itm.value"
-                  :key="idx"
-                  >{{ itm.label }}</a-radio-button
-                >
-              </a-radio-group>
+              
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -65,18 +54,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="年龄区间" name="age">
-              <a-radio-group
-                style="width: 100%"
-                v-model:value="userForm.age"
-                button-style="solid"
-              >
-                <a-radio-button
-                  v-for="(itm, idx) in ageOpt"
-                  :value="itm.value"
-                  :key="idx"
-                  >{{ itm.label }}</a-radio-button
-                >
-              </a-radio-group>
+              
             </a-form-item>
           </a-col>
         </a-row>
@@ -121,16 +99,7 @@ const userForm = ref<any>({
   gender: '',
   age: '',
 })
-const sexOpt = ref<Array<any>>([
-  { value: '18-20岁', label: '18-20岁' },
-  { value: '21-30岁', label: '21-30岁' },
-  { value: '31-40岁', label: '31-40岁' },
-  { value: '40岁以上', label: '40岁以上' },
-])
-const ageOpt = ref<Array<any>>([
-  { value: 'male', label: '男' },
-  { value: 'female', label: '女' },
-])
+
 const userFormRef = ref<any>(null)
 
 const visibleChange = computed({

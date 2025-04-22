@@ -30,7 +30,7 @@
           <div
             class="tag-item"
             :class="{ 'tag-item-active': userForm.gender === item.value }"
-            v-for="(item, index) in sexOpt"
+            v-for="(item, index) in genderOpt"
             :key="index"
             @click="changeSex(item)"
           >
@@ -52,6 +52,17 @@
           </div>
         </div>
       </a-form-item>
+      <a-form-item label="" name="emergencyContact" :rules="rules.emergencyContact">
+        <div class="label">紧急联系人电话</div>
+        <a-input
+          v-model:value="userForm.emergencyContact"
+          placeholder="请输入邮箱"
+          :maxlength="320"
+          show-count
+          allowClear
+          size="large"
+        />
+      </a-form-item>
     </a-form>
   </div>
 </template>
@@ -65,13 +76,13 @@ const userForm = ref<any>({
   gender: '',
   age: '',
 })
-const sexOpt = ref<Array<any>>([
+const ageOpt = ref<Array<any>>([
   { value: '18-20岁', label: '18-20岁' },
   { value: '21-30岁', label: '21-30岁' },
   { value: '31-40岁', label: '31-40岁' },
   { value: '40岁以上', label: '40岁以上' },
 ])
-const ageOpt = ref<Array<any>>([
+const genderOpt = ref<Array<any>>([
   { value: 'male', label: '男' },
   { value: 'female', label: '女' },
 ])
@@ -92,6 +103,10 @@ const rules = ref({
   ],
   gender: [{ required: true, message: '请选择性别' }],
   age: [{ required: true, message: '请选择年龄区间' }],
+  emergencyContact: [
+    { required: true, message: '请输入紧急联系人电话' },
+    { pattern: _regexp.mobile, message: '手机号码格式异常' },
+  ],
 })
 const userFormRef = ref<any>(null)
 const emit = defineEmits<{

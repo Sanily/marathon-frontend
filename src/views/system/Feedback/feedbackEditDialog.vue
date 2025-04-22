@@ -29,8 +29,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-item label="内容" name="content">
-              <a-input
-                type="textarea"
+              <a-textarea
                 v-model:value="userForm.realName"
                 placeholder="请输入内容"
                 :maxlength="200"
@@ -81,16 +80,7 @@ const userForm = ref<any>({
   gender: '',
   age: '',
 })
-const sexOpt = ref<Array<any>>([
-  { value: '18-20岁', label: '18-20岁' },
-  { value: '21-30岁', label: '21-30岁' },
-  { value: '31-40岁', label: '31-40岁' },
-  { value: '40岁以上', label: '40岁以上' },
-])
-const ageOpt = ref<Array<any>>([
-  { value: 'male', label: '男' },
-  { value: 'female', label: '女' },
-])
+
 const userFormRef = ref<any>(null)
 
 const visibleChange = computed({

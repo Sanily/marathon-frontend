@@ -53,9 +53,7 @@ import { Modal } from 'ant-design-vue'
 import { ExclamationCircleFilled } from '@ant-design/icons-vue'
 import useLogin from '../hooks/useLogin'
 import _regexp from '@/utils/_regexp'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const { formState, handleLogin } =
   useLogin()
 const spinning = ref<boolean>(false)
@@ -68,7 +66,7 @@ const rules = ref({
     { required: true, message: '请输入用户名' },
     {
       pattern: _regexp.accountReg,
-      message: '账号允许中英文、数字、下划线，长度6-20个字符',
+      message: '账号允许中英文、数字、下划线，长度5-20个字符',
     },
   ],
   password: [

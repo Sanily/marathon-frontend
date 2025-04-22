@@ -79,7 +79,7 @@ export default {
   dataSource: /^[a-zA-Z0-9_\\.\u4E00-\u9FA5]{1,45}$/,
   // 昵称/姓名 允许中英文数字字母下划线
   nicknameReg: /^[\u4e00-\u9fa5_a-zA-Z0-9]{1,20}$/,
-  accountReg: /^[\u4e00-\u9fa5_a-zA-Z0-9]{6,20}$/,
+  accountReg: /^[\u4e00-\u9fa5_a-zA-Z0-9]{5,20}$/,
   //邀请码  大写字母数字，十位
   codeReg: /^[A-Z0-9]{10}$/,
 }

@@ -9,7 +9,7 @@ export const userInfoRules = ref<any>({
     },
     {
       pattern: _regexp.accountReg,
-      message: '允许中英文、数字、下划线，长度6-20个字符',
+      message: '允许中英文、数字、下划线，长度5-20个字符',
     },
   ],
   name: [
