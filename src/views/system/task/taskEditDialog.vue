@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      title="编辑任务"
+      :title="props.row.id ? '编辑任务' : '新增任务'"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -157,7 +157,7 @@ const handleSubmit = () => {
       }
       const { code, message } = await editTask(params)
       if (code === 200) {
-        Message.success(message || '编辑成功')
+        Message.success(message || '操作成功')
         visibleChange.value = false
         emits('success')
       } else {

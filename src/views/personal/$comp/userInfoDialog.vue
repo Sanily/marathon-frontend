@@ -190,7 +190,7 @@ const handleSubmit = () => {
         ...userForm.value,
       }
       const { message } = await editUserInfo(params)
-        Message.success(message || '编辑成功')
+        Message.success(message || '操作成功')
         visibleChange.value = false
         emits('success')
       }

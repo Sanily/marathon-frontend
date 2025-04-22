@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      title="编辑反馈"
+      :title="props.row.id ? '编辑反馈' : '新增反馈'"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -115,7 +115,7 @@ const handleSubmit = () => {
         delete params.id
       }
       const { message } = await fn(params)
-      Message.success(message || '编辑成功')
+      Message.success(message || '操作成功')
       visibleChange.value = false
       emits('success')
     })

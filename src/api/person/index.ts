@@ -21,6 +21,13 @@ export const getUserInfoById = (params) =>
     method: 'get',
   })
 
+export const addUserInfo = (data) =>
+  fetch<Response<UserInfoRes>>({
+    url: '/api/users/create',
+    method: 'post',
+    data,
+  })
+
 // 个人中心-修改昵称
 export const editUserInfo = (data) =>
   fetch<Response<UserInfoRes>>({

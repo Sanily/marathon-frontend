@@ -1,13 +1,14 @@
 <template>
   <div class="page-container">
   <a-table :columns="columns" :data-source="data" :pagination="pagination">
+    <template #title>
+      <a-button type="primary" @click="handleEdit({})">新增</a-button>
+    </template>
     <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'username'">
-        <a>
-          {{ record.name }}
-        </a>
+      <template v-if="column.key === 'gender'">
+        <span>{{ record.gender ? genderObj[record.gender] : '--' }}</span>
       </template>
-      <template v-else-if="column.key === 'action'">
+      <template v-if="column.key === 'action'">
         <div style="width: 100px" class="btn-op">
           <a-button type="link" @click="handleEdit(record)">编辑</a-button>
           <a-divider type="vertical" />
@@ -63,12 +64,26 @@ const columns = [
     key: 'phone',
   },
   {
+    title: '邮箱',
+    dataIndex: 'email',
+    key: 'email',
+  },
+  {
+    title: '紧急联系人电话',
+    dataIndex: 'emergencyContact',
+    key: 'emergencyContact',
+  },
+  {
     title: '操作项',
     key: 'action',
   },
 ];
 
 const data = ref([]);
+const genderObj = {
+  male: '男',
+  female: '女'
+}
 
 onMounted(() => {
   getData()
@@ -102,6 +117,7 @@ const confirm = (e: MouseEvent, row) => {
 const handleDelete = async (row) => {
   await deleteUser(row)
   Message.success('删除成功');
+  getData(1)
 }
 </script>
 

@@ -132,6 +132,7 @@ const confirm = (e: MouseEvent, row) => {
 const handleDelete = async (row) => {
   await deleteFeedback(row)
   Message.success('删除成功');
+  getData(1)
 }
 </script>
 

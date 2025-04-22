@@ -1,6 +1,9 @@
 <template>
   <div class="page-container">
   <a-table :columns="columns" :data-source="data">
+    <template #title>
+      <a-button type="primary" @click="handleEdit({})">新增</a-button>
+    </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'name'">
         <a>
@@ -118,6 +121,7 @@ const confirm = (e: MouseEvent, row) => {
 const handleDelete = async (row) => {
   await deleteEvent(row)
   Message.success('删除成功');
+  getData(1)
 }
 </script>
 

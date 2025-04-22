@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      title="编辑用户"
+      :title="props.row.id ? '编辑用户' : '新增用户'"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -17,10 +17,10 @@
       >
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item name="username">
+            <a-form-item name="username" :rules="rules.username">
               <template #label>
                 <span>用户名</span>
-                <span class="tip">支持字母、数字、下划线，6-20字符</span>
+                <span class="tip">支持字母、数字、下划线，5-20字符</span>
               </template>
               <a-input
                 v-model:value="userForm.username"
@@ -32,7 +32,7 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="姓名" name="realName">
+            <a-form-item label="姓名" name="realName" :rules="rules.realName">
               <a-input
                 v-model:value="userForm.realName"
                 placeholder="请输入姓名"
@@ -43,7 +43,25 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="性别" name="gender">
+            <a-form-item label="手机号码" name="phone" :rules="rules.phone">
+              <a-input
+                v-model:value="userForm.phone"
+                placeholder="请输入手机号码"
+                allow-clear
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="邮箱" name="email" :rules="rules.email">
+              <a-input
+                v-model:value="userForm.email"
+                placeholder="请输入邮箱"
+                allow-clear
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="性别" name="gender" :rules="rules.gender">
               <a-radio-group
                 style="width: 100%"
                 v-model:value="userForm.gender"
@@ -59,16 +77,7 @@
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="手机号码" name="phone">
-              <a-input
-                v-model:value="userForm.phone"
-                placeholder="请输入手机号码"
-                allow-clear
-              />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="年龄区间" name="age">
+            <a-form-item label="年龄区间" name="age" :rules="rules.age">
               <a-radio-group
                 style="width: 100%"
                 v-model:value="userForm.age"
@@ -81,6 +90,15 @@
                   >{{ itm.label }}</a-radio-button
                 >
               </a-radio-group>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="紧急联系人电话" name="emergencyContact" :rules="rules.emergencyContact">
+              <a-input
+                v-model:value="userForm.emergencyContact"
+                placeholder="请输入紧急联系人电话"
+                allow-clear
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -100,7 +118,8 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { editUser, addUser } from '@/api/user'
+import { userInfoRules } from './option'
+import { addUser, editUser } from '@/api/user'
 import { message as Message } from 'ant-design-vue'
 
 const props = defineProps({
@@ -119,11 +138,12 @@ const emits = defineEmits<{
 }>()
 const userForm = ref<any>({
   id: '',
+  username: '',
   phone: '',
   realName: '',
-  username: '',
   gender: '',
   age: '',
+  emergencyContact: '',
 })
 const ageOpt = ref<Array<any>>([
   { value: '18-20岁', label: '18-20岁' },
@@ -152,6 +172,15 @@ watch(
   }
 )
 
+const rules = computed(() => {
+  let rulesColumns = {} as any
+  const data = {} as any
+  Object.keys(rulesColumns).forEach((k) => {
+    data[k] = userInfoRules.value[k]
+  })
+  return data
+})
+
 const handleSubmit = () => {
   userFormRef.value
     .validate()
@@ -165,16 +194,14 @@ const handleSubmit = () => {
         fn = editUser
       } else {
         fn = addUser
+        delete params.id
       }
-      const { code, message } = await editUser(params)
-      if (code === 200) {
-        Message.success(message || '编辑成功')
+      const { message } = await fn(params)
+        Message.success(message || '操作成功')
         visibleChange.value = false
         emits('success')
-      } else {
-        message && Message.error(message)
       }
-    })
+    )
     .catch(() => {})
 }
 const handleReset = () => {
