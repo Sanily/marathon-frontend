@@ -1,7 +1,16 @@
 <template>
   <div class="page-container">
   <a-table :columns="columns" :data-source="data">
+    <template #title>
+      <a-button type="primary" @click="handleEdit({})">新增</a-button>
+    </template>
     <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'content'">
+        <TextOverflow :text="record.content || '--'" />
+      </template>
+      <template v-if="column.key === 'replyContent'">
+        <TextOverflow :text="record.replyContent || '--'" />
+      </template>
       <template v-if="column.key === 'status'">
         <span>
           <a-tag
@@ -12,8 +21,11 @@
         </span>
       </template>
       <template v-else-if="column.key === 'action'">
-        <div style="width: 100px" class="btn-op">
-          <a-button type="link" @click="handleEdit(record)">编辑</a-button>
+        <div v-if="role === 'ADMIN'" style="width: 80px" class="btn-op">
+          <a-button type="link" @click="handleReply(record)">处理</a-button>
+        </div>
+        <div v-if="role === 'VOLUNTEER'" style="width: 100px" class="btn-op">
+          <a-button type="link" @click="handleEdit(record)" :disabled="record.replyContent">编辑</a-button>
           <a-divider type="vertical" />
           <a-popconfirm
             title="确定删除?"
@@ -21,7 +33,7 @@
             cancel-text="否"
             @confirm="(e) => confirm(e, record)"
           >
-            <a-button danger type="text" @click="handleDelete(record)">删除</a-button>
+            <a-button danger type="text">删除</a-button>
           </a-popconfirm>
         </div>
       </template>
@@ -33,13 +45,19 @@
     :row="{ ...userInfo }"
     @success="getData(1)"
   />
+  <FeedbackReplyDialog
+    v-model:visible="replyDialogVisible"
+    :row="{ ...userInfo }"
+    @success="getData(1)"
+  />
 </template>
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import FeedbackEditDialog from './feedbackEditDialog.vue'
-import { getEventList, deleteEvent } from '@/api/event';
+import FeedbackReplyDialog from './feedbackReplyDialog.vue'
+import { getFeedbackList, deleteFeedback } from '@/api/Feedback';
+import TextOverflow from '@/components/contents/textOverflow.vue'
 import { message as Message } from 'ant-design-vue'
-import { useRouter } from 'vue-router'
 // 标题、内容、状态
 const columns = [
   {
@@ -54,8 +72,8 @@ const columns = [
   },
   {
     title: '回复内容',
-    dataIndex: 'answer',
-    key: 'answer',
+    dataIndex: 'replyContent',
+    key: 'replyContent',
   },
   {
     title: '状态', // 已处理、未处理
@@ -73,17 +91,10 @@ const columns = [
   },
 ];
 
-const data = ref([
-  {
-    "content": "string",
-    "createdAt": "2025-04-22T01:56:21.571Z",
-    "id": 0,
-    "status": "已处理",
-    "volunteerId": 0
-  }
-]);
-
+const data = ref([]);
+const role = ref('')
 onMounted(() => {
+  role.value = localStorage.getItem('global_role')
   getData()
 })
 
@@ -93,13 +104,22 @@ const pagination = ref({
   total: 0
 })
 
-const getData = async (current = 1) => {
+const getData = async (pageNum = 1) => {
+  pagination.value.current = pageNum
+  const { records, total, current } = await getFeedbackList({ ...pagination })
   pagination.value.current = current
-  await getEventList({ ...pagination })
+  pagination.value.total = total
+  data.value = records
 }
 
 const userInfo = ref<any>({})
 const userInfoDialogVisible = ref<boolean>(false)
+const replyDialogVisible = ref<boolean>(false)
+const handleReply = (row) => {
+  userInfo.value = { ...row }
+  replyDialogVisible.value = true
+}
+
 const handleEdit = (row) => {
   userInfo.value = { ...row }
   userInfoDialogVisible.value = true
@@ -110,7 +130,7 @@ const confirm = (e: MouseEvent, row) => {
 };
 
 const handleDelete = async (row) => {
-  await deleteEvent(row)
+  await deleteFeedback(row)
   Message.success('删除成功');
 }
 </script>

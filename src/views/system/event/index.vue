@@ -32,7 +32,7 @@
             cancel-text="否"
             @confirm="(e) => confirm(e, record)"
           >
-            <a-button danger type="text" @click="handleDelete(record)">删除</a-button>
+            <a-button danger type="text">删除</a-button>
           </a-popconfirm>
         </div>
       </template>
@@ -51,12 +51,7 @@ import EventEditDialog from './eventEditDialog.vue'
 import { getEventList, deleteEvent } from '@/api/event';
 import { message as Message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
-// {
-//       "content": "string",
-//       "createdAt": "2025-04-21T14:27:57.963Z",
-//       "eventId": 0,
-//       "id": 0
-//     }
+
 const columns = [
   {
     title: '赛事名称',
@@ -84,21 +79,7 @@ const columns = [
   },
 ];
 
-const data = ref([
-  {
-    "category": "string",
-    "confirmedNumber": 0,
-    "createdAt": "2025-04-21T11:47:57.845Z",
-    "createdBy": 0,
-    "description": "string",
-    "endTime": "2025-04-21T11:47:57.845Z",
-    "id": 0,
-    "location": "string",
-    "name": "string",
-    "requiredNumber": 0,
-    "startTime": "2025-04-21T11:47:57.845Z"
-  },
-]);
+const data = ref([]);
 
 onMounted(() => {
   getData()
@@ -110,9 +91,12 @@ const pagination = ref({
   total: 0
 })
 
-const getData = async (current = 1) => {
+const getData = async (pageNum = 1) => {
+  pagination.value.current = pageNum
+  const { records, total, current } = await getEventList({ ...pagination })
   pagination.value.current = current
-  await getEventList({ ...pagination })
+  pagination.value.total = total
+  data.value = records
 }
 
 const router = useRouter()

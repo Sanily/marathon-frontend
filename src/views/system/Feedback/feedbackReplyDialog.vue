@@ -2,7 +2,7 @@
   <div class="user-info-dialog">
     <a-modal
       v-model:visible="visibleChange"
-      title="编辑反馈"
+      title="处理反馈"
       class="user-info-dialog-wrap"
       :centered="true"
       :maskClosable="false"
@@ -24,6 +24,7 @@
                 :maxlength="20"
                 allow-clear
                 show-count
+                disabled
               />
             </a-form-item>
           </a-col>
@@ -31,6 +32,18 @@
             <a-form-item label="内容" name="content">
               <a-textarea
                 v-model:value="userForm.content"
+                placeholder="请输入内容"
+                :maxlength="200"
+                allow-clear
+                show-count
+                disabled
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-item label="回复内容" name="replyContent">
+              <a-textarea
+                v-model:value="userForm.replyContent"
                 placeholder="请输入内容"
                 :maxlength="200"
                 allow-clear
@@ -55,7 +68,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue'
-import { editFeedback, addFeedback } from '@/api/feedback'
+import { editFeedback } from '@/api/feedback'
 import { message as Message } from 'ant-design-vue'
 
 const props = defineProps({
@@ -77,6 +90,7 @@ const userForm = ref<any>({
   id: '',
   content: '',
   title: '',
+  replyContent: '',
 })
 
 const userFormRef = ref<any>(null)
@@ -91,7 +105,6 @@ watch(
   () => visibleChange.value,
   async (value) => {
     if (value) {
-      console.log(userForm.value, props.row)
       userForm.value = { ...userForm.value, ...props.row }
     } else {
       handleReset()
@@ -106,15 +119,9 @@ const handleSubmit = () => {
       const params = {
         id: props.row.id,
         ...userForm.value,
+        status: '已处理',
       }
-      let fn = null
-      if (props.row.id) {
-        fn = editFeedback
-      } else {
-        fn = addFeedback
-        delete params.id
-      }
-      const { message } = await fn(params)
+      const { message } = await editFeedback(params)
       Message.success(message || '编辑成功')
       visibleChange.value = false
       emits('success')
@@ -127,6 +134,7 @@ const handleReset = () => {
     id: '',
     content: '',
     title: '',
+    replyContent: '',
   }
 }
 </script>

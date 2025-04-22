@@ -17,7 +17,7 @@
             cancel-text="否"
             @confirm="(e) => confirm(e, record)"
           >
-            <a-button danger type="text" @click="handleDelete(record)">删除</a-button>
+            <a-button danger type="text">删除</a-button>
           </a-popconfirm>
         </div>
       </template>
@@ -68,15 +68,7 @@ const columns = [
   },
 ];
 
-const data = ref([
-  {
-    key: '1',
-    realName: 'John Brown',
-    username: 'John Brown',
-    age: 32,
-    gender: '男',
-  },
-]);
+const data = ref([]);
 
 onMounted(() => {
   getData()
@@ -88,9 +80,12 @@ const pagination = ref({
   total: 0
 })
 
-const getData = async (current = 1) => {
+const getData = async (pageNum = 1) => {
+  pagination.value.current = pageNum
+  const { records, total, current } = await getUserList({ ...pagination })
   pagination.value.current = current
-  await getUserList({ ...pagination })
+  pagination.value.total = total
+  data.value = records
 }
 
 const userInfo = ref<any>({})

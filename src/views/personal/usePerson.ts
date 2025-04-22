@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { message as Message } from 'ant-design-vue'
 import { getUserInfoById, editUserInfo } from '@/api/person/index'
 import type { UserInfoRes } from '@/api/person/index'

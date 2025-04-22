@@ -66,7 +66,6 @@
                 style="width: 100%"
                 v-model:value="userForm.gender"
                 button-style="solid"
-                :disabled="disabledOpt.gender"
               >
                 <a-radio-button
                   v-for="(itm, idx) in genderOpt"
@@ -157,7 +156,6 @@ const genderOpt = ref<Array<any>>([
   { value: 'female', label: '女' },
 ])
 const userFormRef = ref<any>(null)
-const disabledOpt = ref<any>({}) // 存放 返回配置的各字段的禁用情况
 
 const visibleChange = computed({
   get: () => props.visible,
