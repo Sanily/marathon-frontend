@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue'
 import { message as Message } from 'ant-design-vue'
-import { editUserInfo } from '@/api/person/index'
+import { getUserInfoById, editUserInfo } from '@/api/person/index'
 import type { UserInfoRes } from '@/api/person/index'
 
 export default function usePerson() {
@@ -9,22 +9,20 @@ export default function usePerson() {
     id: 0,
     name: '',
     mobile: '',
-    ageName: '',
-    sexName: '',
   })
   // 表单实例
   const personFormRef = ref()
+  const username = ref('')
+  const userInfo = ref({})
 
   // 获取个人信息
   const getPersonData = async () => {
-    const data = []
-    localStorage.setItem('userInfo', JSON.stringify(data))
+    const userId = localStorage.getItem('global_userId')
+    const data = await getUserInfoById({ id: userId })
+    localStorage.setItem('global_userInfo', JSON.stringify(data))
+    userInfo.value = data || {}
+    username.value = userInfo.value.realName
   }
-
-  const username = computed(() => {
-    const data = JSON.parse(localStorage.getItem('userInfo')) || {}
-    return data.name
-  })
 
   // 修改名称
   const handleEditName = () => {
@@ -46,6 +44,7 @@ export default function usePerson() {
   return {
     formState,
     username,
+    userInfo,
     personFormRef,
     getPersonData,
     handleEditName,

@@ -3,31 +3,35 @@
     <a-spin :spinning="loading">
       <div class="com-module person-info">
         <div class="name">
-          {{ userInfo.name || '--' }}
-          <div class="icon" @click="handleEdit">
+          {{ userInfo.realName || '--' }}
+          <div v-if="userInfo.role === 'VOLUNTEER'" class="icon" @click="handleEdit">
             <edit-outlined />
           </div>
         </div>
         <a-descriptions :column="4">
           <a-descriptions-item
-            label="姓名"
-            ><TextOverflow :text="userInfo?.name || '--'"
-          /></a-descriptions-item>
-          <a-descriptions-item
             label="用户名"
-            ><TextOverflow :text="userInfo?.account || '--'"
+            ><TextOverflow :text="userInfo?.username || '--'"
           /></a-descriptions-item>
           <a-descriptions-item
             label="手机号"
-            ><TextOverflow :text="userInfo?.mobile || '--'"
+            ><TextOverflow :text="userInfo?.phone || '--'"
           /></a-descriptions-item>
           <a-descriptions-item
             label="性别"
-            ><TextOverflow :text="userInfo?.sexName || '--'"
+            ><TextOverflow :text="userInfo?.gender ? genderObj[userInfo?.gender] : '--'"
           /></a-descriptions-item>
           <a-descriptions-item
             label="年龄"
-            ><TextOverflow :text="userInfo?.ageName || '--'"
+            ><TextOverflow :text="userInfo?.age || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="邮箱"
+            ><TextOverflow :text="userInfo?.email || '--'"
+          /></a-descriptions-item>
+          <a-descriptions-item
+            label="紧急联系人电话"
+            ><TextOverflow :text="userInfo?.emergencyContact || '--'"
           /></a-descriptions-item>
         </a-descriptions>
       </div>
@@ -47,10 +51,15 @@ import {
 } from '@ant-design/icons-vue'
 import UserInfoDialog from './$comp/userInfoDialog.vue'
 import TextOverflow from '@/components/contents/textOverflow.vue'
-import { getUserInfo } from '@/api/person'
+import usePerson from '@/views/personal/usePerson'
+
+const { userInfo, getPersonData } = usePerson()
+const genderObj = {
+  male: '男',
+  female: '女'
+}
 
 const loading = ref<boolean>(false)
-const userInfo = ref<any>({})
 const userInfoDialogVisible = ref<boolean>(false)
 
 onMounted(() => {
@@ -60,9 +69,6 @@ const onReflesh = async () => {
   getPersonData()
 }
 
-const getPersonData = async () => {
-  await getUserInfo()
-}
 const handleEdit = () => {
   userInfoDialogVisible.value = true
 }

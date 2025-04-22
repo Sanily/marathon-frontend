@@ -7,11 +7,11 @@
       name="basic"
       autocomplete="off"
     >
-      <a-form-item label="" name="name" :rules="rules.account">
-        <div class="label">昵称</div>
+      <a-form-item label="" name="account" :rules="rules.account">
+        <div class="label">用户名</div>
         <a-input
-          v-model:value="userForm.account"
-          placeholder="请输入账号名"
+          v-model:value="accountForm.account"
+          placeholder="请输入用户名"
           :maxlength="20"
           show-count
           allowClear
@@ -110,7 +110,7 @@ const validateConfirmPassword = (rule, value) => {
 }
 const rules = ref({
   account: [
-    { required: true, message: '请输入姓名' },
+    { required: true, message: '请输入用户名' },
     {
       pattern: _regexp.accountReg,
       message: '账号允许中英文、数字、下划线，长度5-20个字符',

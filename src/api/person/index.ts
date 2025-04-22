@@ -15,27 +15,17 @@ export const getUserInfo = () =>
     url: '/api/users/',
     method: 'get',
   })
-
-export interface EditUserInfoRes {
-  id: number
-  name?: string
-  roleId?: string | number
-  mobile?: string
-  gender?: string | number
-  age?: string | number
-  email?: string
-  industry?: string | number
-  force?: string | number
-  password?: string
-  checkPassword?: string | number
-  overdue?: string
-}
+export const getUserInfoById = (params) =>
+  fetch<Response<UserInfoRes>>({
+    url: '/api/users/' + params.id,
+    method: 'get',
+  })
 
 // 个人中心-修改昵称
-export const editUserInfo = (data: EditUserInfoRes) =>
+export const editUserInfo = (data) =>
   fetch<Response<UserInfoRes>>({
-    url: '/api/v1/system/user/info',
-    method: 'put',
+    url: '/api/users/update',
+    method: 'post',
     data,
   })
 

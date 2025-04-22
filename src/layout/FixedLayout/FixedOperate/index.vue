@@ -2,12 +2,12 @@
   <div class="layout-operate">
     <a-dropdown :trigger="['click']">
       <div :class="['layout-avatar']">
-        {{ username }}111
+        {{ username }}
         <img :src="bottom" />
       </div>
       <template #overlay>
         <a-menu>
-          <a-menu-item v-if="personPermission" @click="handleClick" key="0">
+          <a-menu-item @click="handleClick" key="0">
             <span class="operate-item"
               ><UserOutlined
                 style="color: #26244c; margin-right: 5px"
@@ -41,15 +41,10 @@ import { showConfirm } from '@/hooks/useConfirm'
 const { username, getPersonData } = usePerson()
 
 onMounted(() => {
-  // 判断是否有打开用户中心的权限
-  getPersonPermission()
   getPersonData()
 })
-const personPermission = ref<boolean>(false)
 const router = useRouter()
-const getPersonPermission = async () => {
-  personPermission.value = true
-}
+
 // 点击跳转个人中心
 const handleClick = () => {
   router.push('/personal')
@@ -69,7 +64,7 @@ const goLoginOut = async () => {
   const { message } = await logout()
   sessionStorage.clear()
   localStorage.clear()
-  router.replace({ path: '/' })
+  router.replace({ path: '/login' })
   message && Message.success(message)
 }
 </script>

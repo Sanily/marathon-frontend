@@ -36,6 +36,7 @@ export const register = (params: Record<string, any>) => {
       emergencyContact: params.emergencyContact,
       phone: params.mobile,
       password: result,
+      role: 'VOLUNTEER',
     },
   })
 }

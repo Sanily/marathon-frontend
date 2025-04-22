@@ -17,40 +17,56 @@
       >
         <a-row :gutter="24">
           <a-col :span="12">
-            <a-form-item name="account" :rules="rules.account">
+            <a-form-item name="username" :rules="rules.username">
               <template #label>
                 <span>用户名</span>
-                <span class="tip">支持字母、数字、下划线，6-20字符</span>
+                <span class="tip">支持字母、数字、下划线，5-20字符</span>
               </template>
               <a-input
-                v-model:value="userForm.account"
+                v-model:value="userForm.username"
                 placeholder="请输入用户名"
                 :maxlength="20"
                 allow-clear
                 show-count
-                :disabled="disabledOpt.account"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="姓名" name="name" :rules="rules.name">
+            <a-form-item label="姓名" name="realName" :rules="rules.realName">
               <a-input
-                v-model:value="userForm.name"
+                v-model:value="userForm.realName"
                 placeholder="请输入姓名"
                 :maxlength="20"
                 allow-clear
                 show-count
-                :disabled="disabledOpt.name"
               />
             </a-form-item>
           </a-col>
           <a-col :span="12">
-            <a-form-item label="性别" name="sex" :rules="rules.sex">
+            <a-form-item label="手机号码" name="phone" :rules="rules.phone">
+              <a-input
+                v-model:value="userForm.phone"
+                placeholder="请输入手机号码"
+                allow-clear
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="邮箱" name="email" :rules="rules.email">
+              <a-input
+                v-model:value="userForm.email"
+                placeholder="请输入邮箱"
+                allow-clear
+              />
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="性别" name="gender" :rules="rules.gender">
               <a-radio-group
                 style="width: 100%"
-                v-model:value="userForm.sex"
+                v-model:value="userForm.gender"
                 button-style="solid"
-                :disabled="disabledOpt.sex"
+                :disabled="disabledOpt.gender"
               >
                 <a-radio-button
                   v-for="(itm, idx) in genderOpt"
@@ -59,15 +75,6 @@
                   >{{ itm.label }}</a-radio-button
                 >
               </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="手机号码" name="mobile" :rules="rules.mobile">
-              <a-input
-                v-model:value="userForm.mobile"
-                placeholder="请输入手机号码"
-                allow-clear
-              />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -84,6 +91,15 @@
                   >{{ itm.label }}</a-radio-button
                 >
               </a-radio-group>
+            </a-form-item>
+          </a-col>
+          <a-col :span="12">
+            <a-form-item label="紧急联系人电话" name="emergencyContact" :rules="rules.emergencyContact">
+              <a-input
+                v-model:value="userForm.emergencyContact"
+                placeholder="请输入紧急联系人电话"
+                allow-clear
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -123,10 +139,12 @@ const emits = defineEmits<{
 }>()
 const userForm = ref<any>({
   id: '',
-  mobile: '',
-  name: '',
-  sex: '',
+  username: '',
+  phone: '',
+  realName: '',
+  gender: '',
   age: '',
+  emergencyContact: '',
 })
 const ageOpt = ref<Array<any>>([
   { value: '18-20岁', label: '18-20岁' },
@@ -165,30 +183,20 @@ const rules = computed(() => {
   return data
 })
 
-const formKeys = computed(() => {
-  return Object.keys(rules.value)
-})
 const handleSubmit = () => {
   userFormRef.value
     .validate()
     .then(async () => {
-      // 将后端返回的字段作为 key 匹配对应的值，转为对象格式作为传参
-      const formOpt = Object.fromEntries(
-        formKeys.value.map((key) => [key, userForm.value[key]])
-      )
       const params = {
         id: props.row.id,
-        ...formOpt,
+        ...userForm.value,
       }
-      const { code, message } = await editUserInfo(params)
-      if (code === 200) {
+      const { message } = await editUserInfo(params)
         Message.success(message || '编辑成功')
         visibleChange.value = false
         emits('success')
-      } else {
-        message && Message.error(message)
       }
-    })
+    )
     .catch(() => {})
 }
 const handleReset = () => {

@@ -26,15 +26,12 @@ export default function useRegister() {
     const _params = Object.assign({}, formData)
     delete _params.checkPassword
     register(_params).then(({ code, message }) => {
-      if (code === 200) {
-        message && Message.success(message)
+        message && Message.success('注册完成')
         setTimeout(() => {
           router.push('/login')
         }, 500)
-      } else {
-        message && Message.error(message)
       }
-    })
+    )
   }
   onBeforeUnmount(() => timer && clearTimeout(timer))
 

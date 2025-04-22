@@ -1,6 +1,6 @@
 <template>
-  <AdminPage v-if="role === 'admin'"></AdminPage>
-  <VolunteerPage v-if="role === 'volunteer'"></VolunteerPage>
+  <AdminPage v-if="role === 'ADMIN'"></AdminPage>
+  <VolunteerPage v-if="role === 'VOLUNTEER'"></VolunteerPage>
 </template>
 
 <script setup lang="ts">
@@ -10,7 +10,7 @@ import VolunteerPage from './volunteer/overview/index.vue'
 
 const role = ref('')
 onMounted(() => {
-  role.value = 'admin'
+  role.value = localStorage.getItem('global_role') || 'VOLUNTEER'
 })
 
 </script>

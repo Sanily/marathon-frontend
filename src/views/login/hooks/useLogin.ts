@@ -17,7 +17,10 @@ export default function useLogin() {
       .then(async (data) => {
         if (data.token) {
           localStorage.setItem('global_token', data?.token)
-          // 跳转至重定向地址
+          localStorage.setItem('global_role', data?.role)
+          localStorage.setItem('global_userId', data?.userId)
+          localStorage.setItem('global_userInfo', JSON.stringify(data))
+          // 跳转至重定向地址C
           Message.success('登录成功')
           router.push('/overview')
           return true

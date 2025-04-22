@@ -32,7 +32,7 @@
             :class="{ 'tag-item-active': userForm.gender === item.value }"
             v-for="(item, index) in genderOpt"
             :key="index"
-            @click="changeSex(item)"
+            @click="changeGender(item)"
           >
             {{ item.label }}
           </div>
@@ -112,7 +112,7 @@ const userFormRef = ref<any>(null)
 const emit = defineEmits<{
   (e: 'success', formData: any): void
 }>()
-const changeSex = (val: any) => {
+const changeGender = (val: any) => {
   userForm.value.gender = val.value || ''
   userFormRef.value.validateFields(['gender'])
 }
