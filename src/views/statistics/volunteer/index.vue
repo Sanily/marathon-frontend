@@ -22,6 +22,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import * as echarts from 'echarts';
+import { getAllEventNews, getMonthlyStats, getVolunteerTaskStats } from '@/api/statistics'
 
 // 示例数据，替换为实际接口调用
 const carouselData = ref([
@@ -29,19 +30,34 @@ const carouselData = ref([
   { id: 2, title: '赛事B 成绩公布', description: '2025-04-18 赛事B成绩已公布，请查看详情' },
   { id: 3, title: '赛事C 完赛', description: '2025-04-15 赛事C圆满结束，感谢参与' }
 ]);
+const fetchAllEventNews = async () => {
+  const data = await getAllEventNews()
+  console.log(data)
+}
 
 const lineData = ref({
   months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
   participated: [5, 8, 12, 10, 7, 9, 11, 6, 13, 8, 10, 14],
   completed:   [4, 7, 11, 9, 6, 8, 10, 5, 12, 7, 9, 13]
 });
+const fetchMonthlyStats = async () => {
+  const data = await getMonthlyStats()
+  console.log(data)
+}
 
 const totalStats = ref({ participated: 120, completed: 110 });
+const fetchVolunteerTaskStats = async () => {
+  const data = await getVolunteerTaskStats()
+  console.log(data)
+}
 
 const lineChart = ref(null);
 const pieChart = ref(null);
 
 onMounted(() => {
+  fetchAllEventNews()
+  fetchMonthlyStats()
+  fetchVolunteerTaskStats()
   // 折线图
   const lineChartInstance = echarts.init(lineChart.value);
   lineChartInstance.setOption({

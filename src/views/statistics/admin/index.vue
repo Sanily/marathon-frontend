@@ -1,12 +1,12 @@
 <template>
   <div class="dashboard-grid">
-    <a-card class="card bar-card" title="任务统计（参与次数 & 完成情况）Top10">
+    <a-card class="card bar-card" title="任务统计（参与次数 & 完成情况）">
       <div ref="barChart" class="chart-container"></div>
     </a-card>
     <a-card class="card pie-card" title="人员完成率分布Top10">
       <div ref="pieChart" class="chart-container"></div>
     </a-card>
-    <a-card class="card list-card" title="任务完成进度排名Top10">
+    <a-card class="card list-card" title="任务完成进度排名">
       <a-list>
         <a-list-item v-for="item in sortedProgressList" :key="item.name" class='progress-item'>
           <span class="item-name">{{ item.name }}</span>
@@ -20,6 +20,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import * as echarts from 'echarts';
+import { getMonthlyTaskStats, getTop10Volunteers, getTaskProgressList } from '@/api/statistics'
 
 // 示例数据（可替换为实际接口调用）
 const barData = ref({
@@ -27,6 +28,10 @@ const barData = ref({
   participated: [120, 98, 75, 63],
   completed: [110, 90, 60, 55]
 });
+const fetchMonthlyTaskStats = async () => {
+  const data = await getMonthlyTaskStats()
+  console.log(data)
+}
 
 const pieData = ref([
   { name: 'Alice', value: 85 },
@@ -34,6 +39,10 @@ const pieData = ref([
   { name: 'Charlie', value: 95 },
   { name: 'Diana', value: 60 }
 ]);
+const fetchTop10Volunteers = async () => {
+  const data = await getTop10Volunteers()
+  console.log(data)
+}
 
 const progressList = ref([
   { name: '任务A', progress: 92 },
@@ -41,6 +50,10 @@ const progressList = ref([
   { name: '任务C', progress: 80 },
   { name: '任务D', progress: 75 }
 ]);
+const fetchTaskProgressList = async () => {
+  const data = await getTaskProgressList()
+  console.log(data)
+}
 
 const sortedProgressList = computed(() => {
   return [...progressList.value].sort((a, b) => b.progress - a.progress);
@@ -50,6 +63,9 @@ const barChart = ref(null);
 const pieChart = ref(null);
 
 onMounted(() => {
+  fetchMonthlyTaskStats()
+  fetchTaskProgressList()
+  fetchTop10Volunteers()
   // 柱状图
   const barInstance = echarts.init(barChart.value);
   barInstance.setOption({
